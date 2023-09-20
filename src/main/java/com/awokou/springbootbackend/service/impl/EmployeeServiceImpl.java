@@ -1,6 +1,8 @@
 package com.awokou.springbootbackend.service.impl;
 
+import com.awokou.springbootbackend.dto.EmployeeDTO;
 import com.awokou.springbootbackend.exception.ResourceNotFoundException;
+import com.awokou.springbootbackend.mapper.EmployeeMapper;
 import com.awokou.springbootbackend.model.Employee;
 import com.awokou.springbootbackend.repository.EmployeeRepository;
 import com.awokou.springbootbackend.service.EmployeeService;
@@ -8,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -16,39 +19,45 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
 
     public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
-        super();
         this.employeeRepository = employeeRepository;
     }
 
     @Override
-    public Employee saveEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
+        if(employeeRepository.existsByEmail(employeeDTO.getEmail())) {
+            throw new ResourceNotFoundException(String.format("Email  %s is already in use", employeeDTO.getEmail()));
+        }
+
+        Employee employee = EmployeeMapper.mapToEmployee(employeeDTO);
+        Employee savedEmployee = employeeRepository.save(employee);
+        return EmployeeMapper.mapToEmployeeDTO(savedEmployee);
     }
 
     @Override
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public List<EmployeeDTO> getAllEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+        return employees.stream().map((employee) -> EmployeeMapper.mapToEmployeeDTO(employee))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Employee getEmployeeById(long id) {
-        return employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id :" + id));
+    public EmployeeDTO getEmployeeById(long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee is not exists with given id : "+id));
 
+        return EmployeeMapper.mapToEmployeeDTO(employee);
     }
 
     @Override
-    public Employee updateEmployee(Employee employee, long id) {
-        // we need to check whether employee with given id is exist in DB or not
-        Employee existingEmployee = employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id :" + id));
+    public EmployeeDTO updateEmployee(EmployeeDTO employeeDTO, long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Employee is not exists with given id:" +id));
+        employee.setLastName(employeeDTO.getLastName());
+        employee.setFirstName(employeeDTO.getFirstName());
+        employee.setEmail(employeeDTO.getEmail());
+        Employee updateEmployee = employeeRepository.save(employee);
 
-        existingEmployee.setFirstName(employee.getFirstName());
-        existingEmployee.setLastName(employee.getLastName());
-        existingEmployee.setEmail(employee.getEmail());
-        // save existing employee to DB
-        employeeRepository.save(existingEmployee);
-        return existingEmployee;
+        return EmployeeMapper.mapToEmployeeDTO(updateEmployee);
     }
 
     @Override
