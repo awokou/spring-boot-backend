@@ -15,13 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Employee", description = "Employee management APIs")
+@Tag(name = "Employee", description = "Employee APIs")
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class EmployeeController {
     private EmployeeService employeeService;
-
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
@@ -71,13 +70,24 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.updateEmployee(employeeDTO, id), HttpStatus.OK);
     }
 
+    @Operation(summary = "Search by email")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = Employee.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }) })
+    @GetMapping("/employees/searchByEmail")
+    public List<EmployeeDTO> getEmployeeByEmail(@RequestParam String email){
+        return employeeService.getEmployeeByEmail(email);
+    }
+
 
     @Operation(summary = "Delete a Employee by Id")
     @ApiResponses({ @ApiResponse(responseCode = "204", content = { @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @DeleteMapping("/employees/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable("id") long id){
-        employeeService.deleteEmployee(id);
+    public ResponseEntity<Void> deleteEmployeeById(@PathVariable("id") long id){
+        employeeService.deleteEmployeeById(id);
         return ResponseEntity.status(204).build();
     }
 }
