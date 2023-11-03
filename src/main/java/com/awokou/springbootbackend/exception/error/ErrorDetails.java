@@ -1,4 +1,4 @@
-package com.awokou.springbootbackend.exception;
+package com.awokou.springbootbackend.exception.error;
 
 import java.util.Date;
 

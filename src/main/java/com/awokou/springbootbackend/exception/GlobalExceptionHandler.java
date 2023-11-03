@@ -2,6 +2,7 @@ package com.awokou.springbootbackend.exception;
 
 import java.util.Date;
 
+import com.awokou.springbootbackend.exception.error.ErrorDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

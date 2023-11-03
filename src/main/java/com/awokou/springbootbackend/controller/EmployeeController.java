@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Employee", description = "Employee APIs")
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class EmployeeController {
@@ -25,7 +24,7 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @Operation(summary = "Create a new Employee")
+    @Operation(summary = "Add new employee")
     @ApiResponses({
             @ApiResponse(responseCode = "201", content = {
                     @Content(schema = @Schema(implementation = Employee.class), mediaType = "application/json") }),
@@ -35,7 +34,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.saveEmployee(employeeDTO), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Retrieve all Employees")
+    @Operation(summary = "List of employees")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
                     @Content(schema = @Schema(implementation = Employee.class), mediaType = "application/json") }),
@@ -48,7 +47,7 @@ public class EmployeeController {
     }
 
     @Operation(
-            summary = "Retrieve a Employee by Id",
+            summary = "Retrieve a employee by Id",
             description = "Get a Employee object by specifying its id. The response is Employee object with id, firstName, lastName,email.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Employee.class), mediaType = "application/json") }),
@@ -59,7 +58,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.getEmployeeById(employeeId), HttpStatus.OK);
     }
 
-    @Operation(summary = "Update a Employee by Id")
+    @Operation(summary = "Update a employee by Id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
                     @Content(schema = @Schema(implementation = Employee.class), mediaType = "application/json") }),
@@ -82,12 +81,12 @@ public class EmployeeController {
     }
 
 
-    @Operation(summary = "Delete a Employee by Id")
+    @Operation(summary = "Delete a employee by Id")
     @ApiResponses({ @ApiResponse(responseCode = "204", content = { @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @DeleteMapping("/employees/{id}")
     public ResponseEntity<Void> deleteEmployeeById(@PathVariable("id") long id){
         employeeService.deleteEmployeeById(id);
-        return ResponseEntity.status(204).build();
+        return ResponseEntity.noContent().build();
     }
 }
