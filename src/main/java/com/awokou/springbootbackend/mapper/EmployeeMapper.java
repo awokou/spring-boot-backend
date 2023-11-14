@@ -17,11 +17,14 @@ public class EmployeeMapper {
         if(employeeDTO == null){
             return null;
         }
-        return new Employee(
-                employeeDTO.getId(),
-                employeeDTO.getLastName(),
-                employeeDTO.getFirstName(),
-                employeeDTO.getEmail());
+
+        Employee employee = new Employee();
+        employee.setId(employeeDTO.getId());
+        employee.setLastName(employeeDTO.getLastName());
+        employee.setFirstName(employeeDTO.getFirstName());
+        employee.setEmail(employeeDTO.getEmail());
+
+        return employee;
     }
 
     /**
@@ -34,10 +37,12 @@ public class EmployeeMapper {
         if(employee == null){
             return null;
         }
-        return new EmployeeDTO(
-                employee.getId(),
-                employee.getLastName(),
-                employee.getFirstName(),
-                employee.getEmail());
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        employeeDTO.setId(employee.getId());
+        employeeDTO.setLastName(employee.getLastName());
+        employeeDTO.setFirstName(employee.getFirstName());
+        employeeDTO.setEmail(employee.getEmail());
+
+        return employeeDTO;
     }
 }

@@ -1,0 +1,30 @@
+<div class="panel panel-primary">
+    <a class="nav-link" routerLink="/employees/create" class="btn btn-primary">New</a>
+    <div class="panel-heading">
+        <h2>List of employee</h2>
+    </div>
+    <div class="panel-body">
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let employee of employees; index as i">
+                    <td>{{ i+1 }}</td>
+                    <td>{{employee.lastName}}</td>
+                    <td>{{employee.firstName}}</td>
+                    <td>{{employee.email}}</td>
+                    <td><a style='margin-right:16px' class="btn btn-danger" onclick="onDelete(employee.id)">Delete</a>
+                        <a [routerLink]="['/employees/', employee.id, 'edit']" style='margin-right:16px' class="btn btn-primary" style="margin-left: 10px">Edit</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

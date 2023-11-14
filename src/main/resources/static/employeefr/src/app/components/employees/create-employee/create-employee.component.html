@@ -1,0 +1,39 @@
+<h3>Create Employee</h3>
+<div style="width: 400px;">
+    <a class="nav-link" routerLink="/employees" class="btn btn-success">Return</a>
+     <div class="alert alert-danger" role="alert" *ngIf="errorMessage">{{errorMessage}}</div>
+    <form [formGroup]="employeeForm" (ngSubmit)="onCreateSubmit()">
+        <div class="form-group">
+            <label for="">LastName</label>
+            <input type="text" class="form-control" formControlName="lastName">
+            <div class="text-danger"
+                *ngIf="employeeForm.controls['lastName'].invalid && (employeeForm.controls['lastName'].dirty || employeeForm.controls['lastName'].touched)">
+                LastName is required
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="">FirstName</label>
+            <input type="text" class="form-control" formControlName="firstName">
+          <div class="text-danger"
+               *ngIf="employeeForm.controls['firstName'].invalid && (employeeForm.controls['firstName'].dirty || employeeForm.controls['firstName'].touched)">
+            firstName is required
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label for="">Email</label>
+            <input type="text" class="form-control" formControlName="email">
+          <div class="text-danger"
+               *ngIf="employeeForm.controls['email'].invalid && (employeeForm.controls['email'].dirty || employeeForm.controls['email'].touched)">
+                Email is required
+          </div>
+          <div class="text-danger"
+               *ngIf="employeeForm.controls['email'].errors?.['email'] && (employeeForm.controls['email'].dirty || employeeForm.controls['email'].touched)">
+                E-mail is invalid.
+          </div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-success">Save</button>
+    </form>
+</div>

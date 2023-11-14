@@ -1,0 +1,26 @@
+<div>
+   <div>
+     <p *ngIf="!isGoodBrowser">Ce navigateur n\'est pas pris en charge. Nous vous recommandons d\'utiliser chrome ou safari.</p>
+     <p *ngIf="!isGoodResolution">Les resolutions supportées sont celles supérieures à 1440X900 pixels et inférieures à 2560X1440 pixels.</p>
+   </div>
+    <nav class="navbar navbar-expand-sm bg-success navbar-dark">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="navbar-brand" routerLink="employees/index">APPLICATION</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="employees/index" routerLinkActive="active">Employees</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container">
+        <br>
+        <h3 style="text-align: center;"></h3>
+        <hr>
+        <div class="card">
+            <div class="card-body">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

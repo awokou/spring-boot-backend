@@ -7,31 +7,27 @@ import com.awokou.springbootbackend.model.Employee;
 import com.awokou.springbootbackend.repository.EmployeeRepository;
 import com.awokou.springbootbackend.service.EmployeeService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
-    private EmployeeRepository employeeRepository;
-    private EmployeeMapper employeeMapper;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
-        this.employeeRepository = employeeRepository;
-        this.employeeMapper = employeeMapper;
-    }
+    private final EmployeeRepository employeeRepository;
+    private final EmployeeMapper employeeMapper;
 
     @Override
     public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
-        if (employeeDTO == null) {
-            throw new IllegalArgumentException("employeeDTO must not be null");
-        }
         checkIfEmployeeExists(employeeDTO);
         Employee employee = employeeMapper.mapToEmployee(employeeDTO);
         if (employee == null) {
-            throw new IllegalArgumentException("employee must not be null, check mappers");
+            throw new IllegalArgumentException("employee must not be null");
         }
 
         Employee savedEmployee = employeeRepository.save(employee);
@@ -70,20 +66,31 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setLastName(employeeDTO.getLastName());
         employee.setFirstName(employeeDTO.getFirstName());
         employee.setEmail(employeeDTO.getEmail());
-
         Employee updateEmployee = employeeRepository.save(employee);
+
         return employeeMapper.mapToEmployeeDTO(updateEmployee);
     }
 
     @Override
     public List<EmployeeDTO> getEmployeeByEmail(String email) {
-        return employeeRepository.findByEmail(email).stream().map((employee) -> employeeMapper.mapToEmployeeDTO(employee))
+        return employeeRepository.findByEmail(email)
+                .stream().map((employee) -> employeeMapper.mapToEmployeeDTO(employee))
                 .collect(Collectors.toList());
     }
 
     @Override
     public void deleteEmployeeById(long id) {
         employeeRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean checkExistingEmail(String email) {
+        boolean existing = false;
+        Optional<Employee> employee = employeeRepository.findByEmailIgnoreCase(email);
+        if (employee.isPresent()) {
+            existing = true;
+        }
+        return existing;
     }
 
     /**

@@ -15,4 +15,5 @@ public interface EmployeeService {
     EmployeeDTO updateEmployee(EmployeeDTO employeeDTO, long id);
     List<EmployeeDTO> getEmployeeByEmail(String email);
     void deleteEmployeeById(long id);
+    boolean checkExistingEmail(String email);
 }
