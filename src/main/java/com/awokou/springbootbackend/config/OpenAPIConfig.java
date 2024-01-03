@@ -15,7 +15,7 @@ import io.swagger.v3.oas.models.info.License;
  * Swagger config will be used both for exporting Swagger UI and for OpenAPI specification generation.
  */
 @Configuration
-public class SwaggerConfig {
+public class OpenAPIConfig {
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI().info(

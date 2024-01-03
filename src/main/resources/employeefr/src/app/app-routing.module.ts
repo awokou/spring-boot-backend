@@ -6,13 +6,14 @@ import { UpdateEmployeeComponent } from './components/employees/update-employee/
 
 const routes: Routes = [
   /*******************Route employee****************/
-  { path: 'employees', redirectTo: 'employees/index', pathMatch: 'full' },
+  { path: 'employees/index', redirectTo: 'employees/index', pathMatch: 'full' },
   { path: 'employees/index', component: EmployeesComponent },
   { path: 'employees/create', component: CreateEmployeeComponent },
   { path: 'employees/:id/edit', component: UpdateEmployeeComponent }
 ];
 
 @NgModule({
+  //imports: [RouterModule.forRoot(routes,{ useHash: true })],
   imports: [RouterModule.forRoot(routes,{ useHash: true })],
   exports: [RouterModule]
 })
